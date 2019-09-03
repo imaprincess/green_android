@@ -130,7 +130,7 @@ public class TwoFactorActivity extends LoggedActivity {
         mPrefix.setVisibility(View.GONE);
         final String type = getString(R.string.id_email_address);
 
-        mPromptText.setText(getTypeString(UI.getText(mPromptText), type));
+        mPromptText.setText(getString(R.string.id_resetting_your_twofactor_takes));
         mContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
