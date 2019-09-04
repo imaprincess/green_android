@@ -2,6 +2,7 @@ package com.greenaddress.gdk;
 
 import android.app.Activity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.blockstream.libgreenaddress.GDK;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,6 +12,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.util.concurrent.SettableFuture;
 import com.greenaddress.greenapi.data.TwoFactorStatusData;
 import com.greenaddress.greenbits.ui.GaActivity;
+import com.greenaddress.greenbits.ui.R;
+import com.greenaddress.greenbits.ui.UI;
 
 public class GDKTwoFactorCall {
     private Activity mParent;
@@ -57,6 +60,8 @@ public class GDKTwoFactorCall {
                     twofactorRequestCode(chosenMethod);
                     break;
                 case "resolve_code":
+                    if(mStatus.isInvalidCode())
+                        UI.toast(mParent, mParent.getString(R.string.id_invalid_twofactor_code), Toast.LENGTH_SHORT);
                     Log.d("RSV", "resolve_code " + mStatus);
                     final String value;
                     if (mStatus.getDevice() != null) {

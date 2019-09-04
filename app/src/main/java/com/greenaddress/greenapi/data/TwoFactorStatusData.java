@@ -20,6 +20,7 @@ public class TwoFactorStatusData extends JSONData {
     private ObjectNode result;
     private HWDeviceDetailData device;
     private HWDeviceRequiredData required_data; // FIXME: Strongly type this
+    private boolean invalidCode;
 
     public String getStatus() {
         return status;
@@ -99,5 +100,13 @@ public class TwoFactorStatusData extends JSONData {
 
     public void setRequiredData(final HWDeviceRequiredData required_data) {
         this.required_data = required_data;
+    }
+
+    public boolean isInvalidCode() {
+        return invalidCode;
+    }
+
+    public void setInvalidCode(boolean invalidCode) {
+        this.invalidCode = invalidCode;
     }
 }
