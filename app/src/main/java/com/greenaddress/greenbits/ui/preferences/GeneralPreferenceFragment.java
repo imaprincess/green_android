@@ -54,6 +54,7 @@ public class GeneralPreferenceFragment extends GAPreferenceFragment implements O
 
     private static final int PINSAVE = 1337;
     public static final int REQUEST_ENABLE_2FA = 2031;
+    private static final int REQUEST_2FA = 101;
 
     private SwitchPreference mPinPref;
     private Preference mWatchOnlyLogin;
@@ -65,6 +66,7 @@ public class GeneralPreferenceFragment extends GAPreferenceFragment implements O
     private Preference mTwoFactorPref;
     private Preference mLimitsPref;
     private SwitchPreference mLocktimePref;
+    private Preference mSetEmail;
     private Preference mSendLocktimePref;
     private Preference mTwoFactorRequestResetPref;
     private Preference mMemonicPref;
@@ -225,6 +227,10 @@ public class GeneralPreferenceFragment extends GAPreferenceFragment implements O
             mService.getExecutor().execute(() -> updateSettings(settings));
             return true;
         });
+
+        // Set nlocktime email
+        mSetEmail = find(PrefKeys.SET_EMAIL);
+        mSetEmail.setOnPreferenceClickListener((preference) -> onSetEmailClicked());
 
         // Send nlocktime recovery emails
         mSendLocktimePref = find(PrefKeys.SEND_NLOCKTIME);
@@ -584,6 +590,7 @@ public class GeneralPreferenceFragment extends GAPreferenceFragment implements O
         final boolean emailConfirmed = mService.getModel().getTwoFactorConfig().getEmail().isConfirmed();
         mLocktimePref.setVisible(emailConfirmed && !isLiquid);
         mSendLocktimePref.setVisible(emailConfirmed && !isLiquid);
+        mSetEmail.setVisible(!emailConfirmed && !isLiquid);
     }
 
     @Override
@@ -688,6 +695,14 @@ public class GeneralPreferenceFragment extends GAPreferenceFragment implements O
             }
         });
         UI.toast(getActivity(), R.string.id_recovery_transaction_request, Toast.LENGTH_SHORT);
+        return false;
+    }
+
+    private boolean onSetEmailClicked() {
+        final Intent intent = new Intent(getActivity(), TwoFactorActivity.class);
+        intent.putExtra("method", "email");
+        intent.putExtra("settingEmail", true);
+        startActivityForResult(intent, REQUEST_2FA);
         return false;
     }
 
